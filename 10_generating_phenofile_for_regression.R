@@ -70,8 +70,7 @@ selB <- filteredB %>%
 
 write.table(selB, "phenotypes_ID.txt", col.names=T)
 
-phenotypes <- read.table("phenotypes_ID.txt")
-write.csv(phenotypes, "test.txt", col.names = T, row.names = F, quote = F)
+
 
 
 
