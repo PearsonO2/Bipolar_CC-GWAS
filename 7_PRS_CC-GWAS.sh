@@ -57,6 +57,6 @@ awk '{$2 = gensub(/*:([0-9]+)_.*/, "rs//1", "g", $2); print;}' daner_pgc3_BDI_no
             K_A1A0 = 0.006 , K_A1A0_high = 0.01 , K_A1A0_low = 0.003 ,  
             K_B1B0 = 0.004 , K_B1B0_high = 0.01 , K_B1B0_low = 0.002 , 
             h2l_A1A0 = 0.1687 , h2l_B1B0 = 0.0693 , rg_A1A0_B1B0 = 0.9571 , intercept_A1A0_B1B0 = 0.171 , m = 8788,  
-            N_A1 = 19578 , N_B1 = 4508 , N_A0 = 155439 , N_B0 = 73009 , N_overlap_A0B0 = 45,169)
+            N_A1 = 19578 , N_B1 = 4508 , N_A0 = 155439 , N_B0 = 73009 , N_overlap_A0B0 = 45169)
 
 
