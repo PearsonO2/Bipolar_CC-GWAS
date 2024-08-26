@@ -129,5 +129,5 @@ pheno <- read.table(file = paste0((Sys.getenv("PRS_R")),"/phenotypes_ID.txt")) #
 
 merged <- inner_join(PRS, pheno, by = "IID") #3446 rows 
 
-write.csv(merged, "PRS_complete.txt", col.names = T, row.names = F, quote = F)
+write.csv(merged, "PRS_complete.txt", col.names = T, row.names = F, quote = F) 
 
