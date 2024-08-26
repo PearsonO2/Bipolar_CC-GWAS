@@ -11,29 +11,56 @@ export PRS_LDSR=/scratch/c.c23045409/dissertation/postGWAS/PRS/LDSR
 export QC=/scratch/c.c23045409/dissertation/postGWAS/PRS/QC/targetdata
 
 
-cd $PRS
+cd $BDRN
 
-#sex information added in BDRN_sex.R
-#need to updated bed and bim files 
-    #need to update IDs
-    cut -d' ' -f2 ${TEST}/M_BDRN_sex.fam > ${TEST}/updated_ids.txt
-    module purge
-    module load plink/2.0
-    plink2 --bfile ${TEST}/M_BDRN --keep-fam ${TEST}/updated_ids.txt --make-bed --out ${TEST}/M_BDRN_filtered
-    #adding sex info 
-    plink2 --bfile ${TEST}/M_BDRN_filtered --fam ${TEST}/M_BDRN_sex.fam --make-bed --out ${TEST}/M_BDRN_updated
+# Need to add sex information to BDRN.fam file 
 
-#QC of test data
+    module load R/4.4.0
+    R
+
+    library(tidyverse)
+    library(data.table)
+
+
+    sex <- read.csv(file = paste0((Sys.getenv("BDRN")),"/BDRN_sex.csv"), header=TRUE)
+    fam <- read.table(file = paste0((Sys.getenv("BDRN")),"/M_BDRN.fam"), header=TRUE)
+
+    sex$Sex <- ifelse(sex$Sex == "Male", 1, ifelse(sex$Sex == "Female", 2, NA)) # recoding sex information
+    colnames(fam) <- c("IID", "FID", "PID", "MID", "sex", "pheno") # assigning col names to fam file
+
+    merged <- inner_join(fam, sex, "IID")
+
+    fam_sex <- merged %>%
+    select(IID, V2, V3, V4, Sex, V6)
+
+    #remove duplicates
+    fam_unique <- fam_sex %>% 
+    distinct(IID, .keep_all = TRUE) # no duplicates
+
+    write.table(fam_sex, "M_BDRN_sex.fam", col.names = F, row.names = F, quote = F)
+
+
+    #need to updated bed and bim files 
+        #need to update IDs
+        cut -d' ' -f2 ${BDRN}/M_BDRN_sex.fam > ${BDRN}/updated_ids.txt # extracting samples with sex info
+
+        module purge
+        module load plink/2.0
+        plink2 --bfile ${BDRN}/M_BDRN --keep-fam ${BDRN}/updated_ids.txt --make-bed --out ${BDRN}/M_BDRN_filtered # extracting samples with sex info from bed, bim and fam files
+        #adding sex info 
+        plink2 --bfile ${BDRN}/M_BDRN_filtered --fam ${BDRN}/M_BDRN_sex.fam --make-bed --out ${BDRN}/M_BDRN_updated # creating bed, bim and fam file for 
+
+#QC of target data
     #standard QC'ing
-    plink2 --bfile ${TEST}/M_BDRN_updated --maf 0.1 --geno 0.01 --mind 0.01 --hwe 1e-6 --write-snplist --make-just-fam --out ${QC}/M_BDRN.qc
+    plink2 --bfile ${BDRN}/M_BDRN_updated --maf 0.1 --geno 0.01 --mind 0.01 --hwe 1e-6 --write-snplist --make-just-fam --out ${QC}/M_BDRN.qc
     
     #pruning 
-    plink2 --bfile ${TEST}/M_BDRN_updated --keep ${QC}/M_BDRN.qc.fam --extract ${QC}/M_BDRN.qc.snplist --indep-pairwise 200 50 0.25 --out ${QC}/M_BDRN.qc
+    plink2 --bfile ${BDRN}/M_BDRN_updated --keep ${QC}/M_BDRN.qc.fam --extract ${QC}/M_BDRN.qc.snplist --indep-pairwise 200 50 0.25 --out ${QC}/M_BDRN.qc
 
     # interogate heterozygosity 
     module purge 
     module load plink/1.9
-    plink --bfile ${TEST}/M_BDRN_updated  --extract ${QC}/M_BDRN.qc.prune.in --keep ${QC}/M_BDRN.qc.fam --het --out ${QC}/M_BDRN.qc
+    plink --bfile ${BDRN}/M_BDRN_updated  --extract ${QC}/M_BDRN.qc.prune.in --keep ${QC}/M_BDRN.qc.fam --het --out ${QC}/M_BDRN.qc
     
     module purge
     module load R/4.4.0
@@ -57,12 +84,12 @@ cd $PRS
     library(data.table)
     library(magrittr)
 
-    bim <- fread(file = paste0((Sys.getenv("TEST")),"/M_BDRN_updated.bim")) %>%
+    bim <- fread(file = paste0((Sys.getenv("BDRN")),"/M_BDRN_updated.bim")) %>%
     setnames(., colnames(.), c("CHR", "SNP", "CM", "BP", "B.A1", "B.A2")) %>%
     .[,c("B.A1","B.A2"):=list(toupper(B.A1), toupper(B.A2))]  # And immediately change the alleles to upper cases
 
     # Read in summary statistic data (require data.table v1.12.0+)
-        CCGWAS <- fread(file = paste0((Sys.getenv("DATA")),"/test.out.results"), fill=TRUE) %>%
+        CCGWAS <- fread(file = paste0((Sys.getenv("PRS_DATA")),"/PRS.out.results"), fill=TRUE) %>%
         .[,c("AE","NEA"):=list(toupper(EA), toupper(NEA))] # And immediately change the alleles to upper cases
     
     # Read in QCed SNPs
@@ -119,7 +146,7 @@ cd $PRS
 # sex check - data does not include sex chromosome, 7 ambiguius though 
     module load plink/1.9
     plink \
-    --bfile ${TEST}/M_BDRN_updated \
+    --bfile ${BDRN}/M_BDRN_updated \
     --extract ${QC}/M_BDRN.qc.prune.in \
     --keep ${QC}/M_BDRN.valid.sample \
     --check-sex \
@@ -136,7 +163,7 @@ cd $PRS
 
 # relatedness 
     plink    \
-    --bfile ${TEST}/M_BDRN_updated  \
+    --bfile ${BDRN}/M_BDRN_updated  \
     --extract ${QC}/M_BDRN.qc.prune.in \
     --keep ${QC}/M_BDRN.valid.sample \
     --rel-cutoff 0.125 \
@@ -144,7 +171,7 @@ cd $PRS
 
 # generate final file 
 plink2 \
-    --bfile ${TEST}/M_BDRN_updated  \
+    --bfile ${BDRN}/M_BDRN_updated  \
     --make-bed \
     --keep ${QC}/M_BDRN.qc.rel.id \
     --out ${QC}/M_BDRN.qc \

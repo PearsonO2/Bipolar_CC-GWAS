@@ -77,6 +77,8 @@ plink \
 
 # extract PRS scores using R
 
+cd $PRS_R
+
 module purge 
 module load R/4.4.0
 R 
@@ -114,20 +116,5 @@ colnames(prs_cs) <- c("IID", "PRScs")
 write.table(prs_cs, "sumPRScs.txt", col.names=TRUE, row.names=FALSE, quote=FALSE)
 quit()
 
-## save to own server
 
-#phenotypes_ID.txt saved to /scratch/c.c23045409/dissertation/postGWAS/PRS/Ranalysis created by 10_generating_phenotfile_...
-
-# now add PRS to phenotypes file 
-
-R
-library(data.table)
-library(tidyverse)
-
-PRS <- fread(file = paste0((Sys.getenv("PRS_R")),"/sumPRScs.txt"), fill=TRUE) #8285 rows 
-pheno <- read.table(file = paste0((Sys.getenv("PRS_R")),"/phenotypes_ID.txt")) #3446 rows 
-
-merged <- inner_join(PRS, pheno, by = "IID") #3446 rows 
-
-write.csv(merged, "PRS_complete.txt", col.names = T, row.names = F, quote = F) 
 
