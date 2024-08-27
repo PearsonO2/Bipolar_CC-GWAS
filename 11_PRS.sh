@@ -10,6 +10,7 @@ export PRS_LDSR=/scratch/c.c23045409/dissertation/postGWAS/PRS/LDSR
 export QC=/scratch/c.c23045409/dissertation/postGWAS/PRS/QC/targetdata
 export PRS_R=/scratch/c.c23045409/dissertation/postGWAS/PRS/Ranalysis
 export PRS_res=/scratch/c.c23045409/dissertation/postGWAS/PRS/dir
+export BD_QC=/scratch/c.c23045409/dissertation/postGWAS/PRS/QC/basedata
 
 
 ##########################################################################################
@@ -25,11 +26,8 @@ plink2 --bfile ${QC}/M_BDRN.qc --pca 10 --out ${QC}/M_BDRN.PCA
 # create sumstats file 
 
   #GWAS summary statistics file must have the following column headers: SNP, A1, A1, OR/BETA, SE
-    gunzip $PRS_DATA/PRS.out.results.gz
-    awk 'NR==1 {print $1, "A1", "A2", "BETA", "SE"} NR>1 {print $1, $4, $5, $6, $7}' $PRS_DATA/PRS.out.results > sumstats.txt
-    gzip $PRS_DATA/PRS.out.results
-
-
+    awk 'NR==1 {print $1, "A1", "A2", "BETA", "SE"} NR>1 {print $1, $4, $5, $6, $7}' $BD_QC/prs_gwas_maf_info_xdup_amb_xMHC.txt > $PRS_DATA/sumstats.txt
+   
 ##########################################################################################
 cd $PRS
 ###PRS.job

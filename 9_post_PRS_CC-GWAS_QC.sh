@@ -10,7 +10,7 @@ LD=/scratch/c.mpmlh/MET588_h2_rg/MET588_LSH/
 export PRS=/scratch/c.c23045409/dissertation/postGWAS/PRS
 PRScs=/scratch/c.c23045409/dissertation/postGWAS/PRS/PRScs
 export PRS_LDSR=/scratch/c.c23045409/dissertation/postGWAS/PRS/LDSR
-export PRS_QC=/scratch/c.c23045409/dissertation/postGWAS/PRS/QC/basedata
+export BD_QC=/scratch/c.c23045409/dissertation/postGWAS/PRS/QC/basedata
 
 # all on GWAS dataset 
 #Heritablity check 
@@ -72,24 +72,27 @@ export PRS_QC=/scratch/c.c23045409/dissertation/postGWAS/PRS/QC/basedata
 # select for MAF>0.01 and INFO>0.8
     cd $PRS_LDSR
     #create a maf column for BPI and BPII sumstats without BDRN
-    awk 'NR==1 {print $2, "MAF"} NR>1 {n_a = 4508; n_u = 73009; overall_freq = ($6 * n_a + $7 * n_u) / (n_a + n_u); maf = (overall_freq < 0.5) ? overall_freq : 1 - overall_freq; print $2, maf;}' $PRS_DATA/daner_pgc3_BDII_noBDRN > $BP_QC/BDII_maf.txt
-    awk 'NR==1 {print $2, "MAF"} NR>1 {n_a = 19578; n_u = 155439; overall_freq = ($6 * n_a + $7 * n_u) / (n_a + n_u); maf = (overall_freq < 0.5) ? overall_freq : 1 - overall_freq; print $2, maf;}' $PRS_DATA/daner_pgc3_BDI_noBDRN > $BP_QC/BDI_maf.txt
+    awk 'NR==1 {print $2, "MAF"} NR>1 {n_a = 4508; n_u = 73009; overall_freq = ($6 * n_a + $7 * n_u) / (n_a + n_u); maf = (overall_freq < 0.5) ? overall_freq : 1 - overall_freq; print $2, maf;}' $PRS_DATA/daner_pgc3_BDII_noBDRN > $BD_QC/BDII_maf.txt
+    awk 'NR==1 {print $2, "MAF"} NR>1 {n_a = 19578; n_u = 155439; overall_freq = ($6 * n_a + $7 * n_u) / (n_a + n_u); maf = (overall_freq < 0.5) ? overall_freq : 1 - overall_freq; print $2, maf;}' $PRS_DATA/daner_pgc3_BDI_noBDRN > $BD_QC/BDI_maf.txt
     #add MAF cols to ldsr_input.txt
-    awk 'NR==FNR {maf[$1]=$2; next} NR==1 {print $0, "MAF_BPi"} NR>1 {print $0, maf[$1]}' $BP_QC/BDI_maf.txt $PRS_LDSR/ldsr_input.txt > $BP_QC/prs_ccgwas_mafi.txt
-    awk 'NR==FNR {maf[$1]=$2; next} NR==1 {print $0, "MAF_BPii"} NR>1 {print $0, maf[$1]}' $BP_QC/BDII_maf.txt $BP_QC/prs_ccgwas_mafi.txt > $BP_QC/prs_ccgwas_mafi_ii.txt
+    awk 'NR==FNR {maf[$1]=$2; next} NR==1 {print $0, "MAF_BPi"} NR>1 {print $0, maf[$1]}' $BD_QC/BDI_maf.txt $PRS_LDSR/ldsr_input.txt > $BD_QC/prs_ccgwas_mafi.txt
+    awk 'NR==FNR {maf[$1]=$2; next} NR==1 {print $0, "MAF_BPii"} NR>1 {print $0, maf[$1]}' $BD_QC/BDII_maf.txt $BD_QC/prs_ccgwas_mafi.txt > $BD_QC/prs_ccgwas_mafi_ii.txt
 
     #calucalte MAF_avg
-    awk 'NR==1 {print $0, "MAF_avg"} NR>1 {maf_avg=($12+$13)/2; print $0, maf_avg}' $BP_QC/prs_ccgwas_mafi_ii.txt > $BP_QC/prs_ccgwas_maf.txt
+    awk 'NR==1 {print $0, "MAF_avg"} NR>1 {maf_avg=($12+$13)/2; print $0, maf_avg}' $BD_QC/prs_ccgwas_mafi_ii.txt > $BD_QC/prs_ccgwas_maf.txt
     
     #select SNPs with MAF_avg > 0.01 and INFO > 0.8
-    awk 'NR==1 || ($14 > 0.01) && ($9 > 0.8) {print}' $BP_QC}/prs_ccgwas_maf.txt > $BP_QC/prs_ccgwas_maf_info.txt
+    awk 'NR==1 || ($14 > 0.01) && ($9 > 0.8) {print}' $BD_QC/prs_ccgwas_maf.txt > $BD_QC/prs_ccgwas_maf_info.txt
     # Removed 74134 SNPs (4911919-4837785)
 
 # duplicate SNPs
-    awk '{seen[$3]++; if(seen[$3]==1){ print}}' $BP_QC/prs_ccgwas_maf_info.txt > $BP_QC/prs_gwas_maf_info_xdup.txt
+    awk '{seen[$3]++; if(seen[$3]==1){ print}}' $BD_QC/prs_ccgwas_maf_info.txt > $BD_QC/prs_gwas_maf_info_xdup.txt
     #removed 62004 (4837785-4775781)
 
 #ambiguous SNPs
-    awk '!( ($4=="A" && $5=="T") || ($4=="T" && $5=="A") || ($4=="G" && $5=="C") || ($4=="C" && $5=="G")) {print}' $BP_QC/prs_gwas_maf_info_xdup.txt > $BP_QC/prs_gwas_maf_info_xdup_amb.txt
+    awk '!( ($4=="A" && $5=="T") || ($4=="T" && $5=="A") || ($4=="G" && $5=="C") || ($4=="C" && $5=="G")) {print}' $BD_QC/prs_gwas_maf_info_xdup.txt > $BD_QC/prs_gwas_maf_info_xdup_amb.txt
     #no ambiguous SNPs
 
+# remove SNPs in extended MHC locus of CHR6 25MB-35MB
+    awk '!(($2 == 6) && ($3 >= 25000000) && ($3 <= 35000000))' $BD_QC/prs_gwas_maf_info_xdup_amb.txt > $BD_QC/prs_gwas_maf_info_xdup_amb_xMHC.txt
+    # 26033 SNPs removed 
