@@ -87,6 +87,15 @@ summary(m2a)
 p_values <- 2 * (1 - pnorm(abs(-3.4983)))
 print(p_values)
 
+# se and confidence interval 
+coef2 <- summary(m2a)$coefficients
+se <- coef2[, "Std. Error"]
+Z <- qnorm(0.975)  # for a 95% confidence interval
+CI_lower <- coef2[, "Value"] - Z * se
+CI_upper <- coef2[, "Value"] + Z * se
+CI <- cbind(CI_lower, CI_upper)
+CI
+
 ####### BADDS psychosis as a count variable #######
 BADDS_P <- PRS_filt %>%
   filter(BADDS_P !=999) # lost 319 individuals 
@@ -105,6 +114,13 @@ compare_performance(m3b, m3a)
 summary(m3a)
 p_values <- 2 * (1 - pnorm(abs(4.255)))
 print(p_values)
+
+#confidence interval 
+coef3 <- summary(m3a)$coefficients
+Z <- qnorm(0.975)  # for a 95% confidence interval
+CI_lower <- coef3[, "Value"] - Z * se
+CI_upper <- coef3[, "Value"] + Z * se
+CI <- cbind(CI_lower, CI_upper)
 
 ####### BADDS mood incongruent #######
 BADDS_I <- PRS_filt %>%
@@ -139,6 +155,11 @@ m5b <- polr(BADDS_M ~ Age_at_Interview + Sex + ARRAY + PC1 + PC2 + PC3 + PC4 + P
 
 compare_performance(m5a, m5b)
 
+coef5 <- summary(m5a)$coefficients
+Z <- qnorm(0.975)  # for a 95% confidence interval
+CI_lower <- coef5[, "Value"] - Z * se
+CI_upper <- coef5[, "Value"] + Z * se
+CI <- cbind(CI_lower, CI_upper)
 #obtaining beta and pval
 summary(m5a)
 p_values <- 2 * (1 - pnorm(abs(7.6938)))
@@ -162,6 +183,15 @@ compare_performance(m6a, m6b)
 summary(m6a)
 p_values <- 2 * (1 - pnorm(abs(-3.1682)))
 print(p_values)
+
+
+#confidence interval 
+coef6 <- summary(m6a)$coefficients
+Z <- qnorm(0.975)  # for a 95% confidence interval
+CI_lower <- coef6[, "Value"] - Z * se
+CI_upper <- coef6[, "Value"] + Z * se
+CI <- cbind(CI_lower, CI_upper)
+CI
 
 ####### Age of onset of impairment ####### 
 age_onset_impairment <- PRS_filt %>%
@@ -194,6 +224,14 @@ summary(m8a)
 p_values <- 2 * (1 - pnorm(abs(-3.93512)))
 print(p_values)
 
+#confidence interval 
+coef8 <- summary(m8a)$coefficients
+Z <- qnorm(0.975)  # for a 95% confidence interval
+CI_lower <- coef8[, "Value"] - Z * se
+CI_upper <- coef8[, "Value"] + Z * se
+CI <- cbind(CI_lower, CI_upper)
+CI
+
 
 ####### Suicidal Ideation ####### 
 suicidal_ideation <- PRS_filt %>%
@@ -210,4 +248,13 @@ compare_performance(m9a, m9b)
 summary(m9a)
 p_values <- 2 * (1 - pnorm(abs(-2.0635)))
 print(p_values)
+
+#confidence interval 
+coef9 <- summary(m9a)$coefficients
+Z <- qnorm(0.975)  # for a 95% confidence interval
+CI_lower <- coef9[, "Value"] - Z * se
+CI_upper <- coef9[, "Value"] + Z * se
+CI <- cbind(CI_lower, CI_upper)
+CI
+
 
