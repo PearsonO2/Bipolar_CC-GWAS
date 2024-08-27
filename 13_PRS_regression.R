@@ -54,9 +54,17 @@ m1b <- polr(Number_of_episodes_mania_LE ~ Age_at_Interview + Sex++ ARRAY + PC1+ 
 compare_performance(m1a, m1b)
 
 #obtaining the p-value 
-summary(m1a_ordinal) #tval = -1.6329
+summary(m1a) #tval = -1.6329
 p_values <- 2 * (1 - pnorm(abs(-1.6329)))
 print(p_values)
+
+# se and confidence interval 
+coef <- summary(m1a)$coefficients
+se <- coef[, "Std. Error"]
+Z <- qnorm(0.975)  # for a 95% confidence interval
+CI_lower <- coef[, "Value"] - Z * se
+CI_upper <- coef[, "Value"] + Z * se
+CI <- cbind(CI_lower, CI_upper)
 
 ####### no episodes depression LE #######
 no_depression <- PRS_filt %>%
