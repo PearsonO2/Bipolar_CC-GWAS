@@ -65,6 +65,7 @@ Z <- qnorm(0.975)  # for a 95% confidence interval
 CI_lower <- coef[, "Value"] - Z * se
 CI_upper <- coef[, "Value"] + Z * se
 CI <- cbind(CI_lower, CI_upper)
+CI
 
 ####### no episodes depression LE #######
 no_depression <- PRS_filt %>%
@@ -121,6 +122,7 @@ Z <- qnorm(0.975)  # for a 95% confidence interval
 CI_lower <- coef3[, "Value"] - Z * se
 CI_upper <- coef3[, "Value"] + Z * se
 CI <- cbind(CI_lower, CI_upper)
+CI 
 
 ####### BADDS mood incongruent #######
 BADDS_I <- PRS_filt %>%
@@ -140,6 +142,14 @@ compare_performance(m4a, m4b)
 summary(m4a)
 p_values <- 2 * (1 - pnorm(abs(0.62130)))
 print(p_values)
+
+# CI 
+coef4 <- summary(m4a)$coefficients
+Z <- qnorm(0.975)  # for a 95% confidence interval
+CI_lower <- coef4[, "Value"] - Z * se
+CI_upper <- coef4[, "Value"] + Z * se
+CI <- cbind(CI_lower, CI_upper)
+CI
 
 ####### BADDS mania ####### 
 BADDS_M <- PRS_filt %>%
@@ -165,6 +175,7 @@ Z <- qnorm(0.975)  # for a 95% confidence interval
 CI_lower <- coef5[, "Value"] - Z * se
 CI_upper <- coef5[, "Value"] + Z * se
 CI <- cbind(CI_lower, CI_upper)
+CI
 
 ####### BADDS depression ####### 
 BADDS_D <- PRS_filt %>%
@@ -199,15 +210,25 @@ age_onset_impairment <- PRS_filt %>%
   filter(Age_onset_impairment != 999) # 185 lost 
 
 m7a <- lm(Age_onset_impairment ~ PRSadj + Age_at_Interview + Sex + ARRAY+ PC1+ PC2+ PC3+ PC4+ PC5, data = age_onset_impairment)
-summary(model7a)
 
 m7b <- lm(Age_onset_impairment ~ Age_at_Interview + Sex + ARRAY+ PC1+ PC2+ PC3+ PC4+ PC5, data = age_onset_impairment)
-summary(model7b)
+
 
 compare_performance(m7a,m7b)
 
 #obtaining beta and p-value
 summary(m7a)
+
+# CI
+
+coefficients <- coef(m7a)
+model_summary <- summary(m7a)
+standard_errors <- model_summary$coefficients[, "Std. Error"]
+t_value <- qt(0.975, df = model_summary$df[2])
+CI_lower <- coefficients - t_value * standard_errors
+CI_upper <- coefficients + t_value * standard_errors
+CI <- cbind(CI_lower, CI_upper)
+CI
 
 ####### Rapid cycling  ####### 
 rapid_cycling <- PRS_filt %>%
