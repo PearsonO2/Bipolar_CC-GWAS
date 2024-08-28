@@ -155,15 +155,16 @@ m5b <- polr(BADDS_M ~ Age_at_Interview + Sex + ARRAY + PC1 + PC2 + PC3 + PC4 + P
 
 compare_performance(m5a, m5b)
 
+#obtaining beta and pval
+summary(m5a)
+p_values <- 2 * (1 - pnorm(abs(7.6938)))
+print(p_values)
+
 coef5 <- summary(m5a)$coefficients
 Z <- qnorm(0.975)  # for a 95% confidence interval
 CI_lower <- coef5[, "Value"] - Z * se
 CI_upper <- coef5[, "Value"] + Z * se
 CI <- cbind(CI_lower, CI_upper)
-#obtaining beta and pval
-summary(m5a)
-p_values <- 2 * (1 - pnorm(abs(7.6938)))
-print(p_values)
 
 ####### BADDS depression ####### 
 BADDS_D <- PRS_filt %>%
