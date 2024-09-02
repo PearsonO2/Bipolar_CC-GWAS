@@ -3,10 +3,10 @@
 export DATA=/scratch/c.c23045409/dissertation/ccgwas_input/data 
 export CCGWAS_out=/scratch/c.c23045409/dissertation/ccgwas_output
 export annot=/scratch/c.c23045409/dissertation/postGWAS/annot
-export LDSR_post=/scratch/c.c23045409/dissertation/postGWAS/postGWAS_LDSR
+export LDSR_post=/scratch/c.c23045409/dissertation/postGWAS/LDSR
 export LDAK_post=/scratch/c.c23045409/dissertation/postGWAS/LDAK
 export sex_strat=/scratch/c.c23045409/dissertation/postGWAS/sex_strat
-LD=/scratch/c.mpmlh/MET588_h2_rg/MET588_LSH/
+export LD=/scratch/c.c23045409/dissertation/ccgwas_input/LDSR/ref
 
 ## heritability estimates
     #LDSR
@@ -195,19 +195,24 @@ LD=/scratch/c.mpmlh/MET588_h2_rg/MET588_LSH/
     cd $sex_strat
     module load R/4.4.0
     R 
+
+    #set up envitonment 
     library(dplyr)
     library(data.table) 
 
+    #load files
     BPii_m <- fread(file = paste0((Sys.getenv("sex_strat")),"/daner_pgc4_males_BDII_only_newPC"), header = T)
     BPii_f <- fread(file = paste0((Sys.getenv("sex_strat")),"/daner_pgc4_females_BDII_only_newPC"), header = T)
     BPi_f <- fread(file = paste0((Sys.getenv("sex_strat")),"/daner_pgc4_females_BDI_only_newPC"), header = T)
     BPi_m <- fread(file = paste0((Sys.getenv("sex_strat")),"/daner_pgc4_males_BDI_only_newPC"), header = T)
 
+    #select columns 
     BPii_mb <- select(BPii_m, "SNP", "CHR", "BP", "A1", "A2", "OR", "SE", "P", "Nca", "Nco")
     BPii_fb <- select(BPii_f, "SNP", "CHR", "BP", "A1", "A2", "OR", "SE", "P", "Nca", "Nco")
     BPi_mb <- select(BPi_m, "SNP", "CHR", "BP", "A1", "A2", "OR", "SE", "P", "Nca", "Nco")
     BPi_fb <- select(BPi_f, "SNP", "CHR", "BP", "A1", "A2", "OR", "SE", "P", "Nca", "Nco")
 
+    #save new files 
     write.table(BPii_mb, "BPii_m_sumstats.txt", col.names = T, row.names = F, quote = F)
     write.table(BPii_fb, "BPii_f_sumstats.txt", col.names = T, row.names = F, quote = F)
     write.table(BPi_mb, "BPi_m_sumstats.txt", col.names = T, row.names = F, quote = F)
