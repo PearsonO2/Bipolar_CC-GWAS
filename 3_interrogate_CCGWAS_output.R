@@ -1,13 +1,12 @@
-#interogating CC-GWAS output 
+#interrogating CC-GWAS output 
 
 
-setwd("~/Documents/Masters/Dissertation/code /final_code/figures")
-
+# prepare R environment
 library(dplyr)
 library(data.table)
 library(qqman)
 
-CCGWAS <- fread("../test_final.out.results.gz")
+CCGWAS <- fread("test_final.out.results.gz")
 
 
 ##QQ plot
