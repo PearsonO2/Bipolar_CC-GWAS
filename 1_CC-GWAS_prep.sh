@@ -1,4 +1,4 @@
-# final pre CC-GWAS coding
+# Determining CC-GWAS input parameters
 
 export DATA=/scratch/c.c23045409/dissertation/ccgwas_input/data 
 export LDSR=/scratch/c.c23045409/dissertation/ccgwas_input/LDSR 
@@ -12,36 +12,27 @@ LD=/scratch/c.mpmlh/MET588_h2_rg/MET588_LSH/
     ###LDSR
     module load ldsc/1.0.1
 
+    # munge sumstats
     munge_sumstats.py --sumstats $DATA/BPi.txt --N-col Neff --snp SNP --a1 A1 --a2 A2 --p P --signed-sumstats OR,1 --out $LDSR/BPI_neff
     munge_sumstats.py --sumstats $DATA/BPii.txt --N-col Neff --snp SNP --a1 A1 --a2 A2 --p P --signed-sumstats OR,1 --out $LDSR/BPII_neff
 
-    ldsc.py \
-    --h2 $LDSR/BPI_neff.sumstats.gz \
-    --ref-ld-chr $LD/eur_w_ld_chr/ \
-    --w-ld-chr $LD/eur_w_ld_chr/ \
-    --samp-prev 0.5 \
-    --pop-prev 0.006 \
-    --out $LDSR/BPI_Neff
+        #BDI
+        ldsc.py \
+        --h2 $LDSR/BPI_neff.sumstats.gz \
+        --ref-ld-chr $LD/eur_w_ld_chr/ \
+        --w-ld-chr $LD/eur_w_ld_chr/ \
+        --samp-prev 0.5 \
+        --pop-prev 0.006 \
+        --out $LDSR/BPI_Neff
 
-    #Total Liability scale h2: 0.1842 (se = 0.0082, pval = 4.731458e-112)
-    #Lambda GC: 1.4139
-    #Mean Chi^2: 1.5205
-    #Intercept: 1.0365 (se = 0.0106, pval = 0.0002872285)
-    #Ratio: 0.0701 (0.0204)
-
-    ldsc.py \
-    --h2 $LDSR/BPII_neff.sumstats.gz \
-    --ref-ld-chr $LD/eur_w_ld_chr/ \
-    --w-ld-chr $LD/eur_w_ld_chr/ \
-    --samp-prev 0.5 \
-    --pop-prev 0.004 \
-    --out $LDSR/BPII_Neff
-
-    #Total Liability scale h2: 0.0908 (se = 0.0113, p-value = 4.663773e-16)
-    #Lambda GC: 1.1144
-    #Mean Chi^2: 1.1212
-    #Intercept: 1.0308 (se = 0.0076, pval = 2.532236e-05)
-    #Ratio: 0.2539 (0.0629)
+        #BDII
+        ldsc.py \
+        --h2 $LDSR/BPII_neff.sumstats.gz \
+        --ref-ld-chr $LD/eur_w_ld_chr/ \
+        --w-ld-chr $LD/eur_w_ld_chr/ \
+        --samp-prev 0.5 \
+        --pop-prev 0.004 \
+        --out $LDSR/BPII_Neff
 
     # cross trait LDSR
 
@@ -53,12 +44,6 @@ LD=/scratch/c.mpmlh/MET588_h2_rg/MET588_LSH/
         --pop-prev 0.006,0.004 \
         --out $LDSR/BPIvII_neff
 
-       # Genetic Correlation
-       # -------------------
-       # Genetic Correlation: 0.8456 (0.055)
-       # Intercept: 0.1817 (0.0064)
-       # Z-score: 15.3635
-       # P: 2.8775e-53
 
         #calculating p-vales 
         module load R/4.4.0
@@ -180,25 +165,19 @@ LD=/scratch/c.mpmlh/MET588_h2_rg/MET588_LSH/
     quit()
 
     ## running LDAK
-        # save files to own directory and run on terminal 
-        cd /Users/oliviap/Documents/Masters/Dissertation/week8/LDAK
+        # cannot be run on VScode (run on terminal)
+        cd $LDAK
         chmod a+x ldak5.2.mac
         ./ldak5.2.mac
 
         #LDAK-thin 
         ./ldak5.2.mac --sum-hers snpher-thin_BPI --summary pre-CCGWAS_LDAK/BPi_maf_gt_0.05.raw --tagfile ldak.thin.hapmap.gbr.tagging --fixed-n 792643 --check-sums NO
-            #0.037806 (sd =  0.000809)
         ./ldak5.2.mac --sum-hers snpher-thin_BPII --summary pre-CCGWAS_LDAK/BPii_maf_gt_0.05.raw --tagfile ldak.thin.hapmap.gbr.tagging --fixed-n 792643 --check-sums NO
-            #0.008664 (sd = 0.000583)
 
         #BDL-LDAK
         # using BLD-LDAK tagging file (It is a slightly more complex model of heritability which also takes into account functional annotations)
         ./ldak5.2.mac --sum-hers snpher-BLD_BPi --summary pre-CCGWAS_LDAK/BPi_maf_gt_0.05.raw --tagfile bld.ldak.hapmap.gbr.tagging --fixed-n 792643 --check-sums NO
-            #0.042464 (sd = 0.001707) 
         ./ldak5.2.mac --sum-hers snpher-BLD_BPii --summary pre-CCGWAS_LDAK/BPii_maf_gt_0.05.raw --tagfile bld.ldak.hapmap.gbr.tagging --fixed-n 792643 --check-sums NO
-            #0.013886 (sd = 0.001446)
-
-        #these values are much lower than LDSR, maybe use different N number (not fixed)
 
 
 # estimating the number of independent loci 
@@ -246,11 +225,8 @@ LD=/scratch/c.mpmlh/MET588_h2_rg/MET588_LSH/
         module load singularity 
         singularity shell --bind /home/c.c23045409/containers/mixer:/mnt /home/c.c23045409/containers/mixer/singularity/mixer.sif
 
-    # creating the figures 
+    # creating the file
     python /tools/mixer/precimed/mixer_figures.py combine --json $MIX_out/BPi2.fit.rep@.json  --out $MIX_out/BPi.fit
     python /tools/mixer/precimed/mixer_figures.py combine --json $MIX_out/BPii2.fit.rep@.json  --out $MIX_out/BPii.fit 
     python /tools/mixer/precimed/mixer_figures.py combine --json $MIX_out/BPivBPii.fit.rep@.json  --out $MIX_out/BPivBPii.fit
     python /tools/mixer/precimed/mixer_figures.py one --json $MIX_out/BPi.fit.json $MIX_out/BPii.fit.json --out $MIX_dir/BPi_and_BPii.fit --trait1 BPi BPii --statistic mean std --ext png 
-
-# BPI = 6614.5 (se = 251.2)
-# BPII = 10961.8 (se = 5340.1)
