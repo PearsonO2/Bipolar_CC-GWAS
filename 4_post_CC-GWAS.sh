@@ -4,10 +4,10 @@ export DATA=/scratch/c.c23045409/dissertation/ccgwas_input/data
 export CCGWAS_out=/scratch/c.c23045409/dissertation/ccgwas_output
 export annot=/scratch/c.c23045409/dissertation/postGWAS/annot
 export SMR=/scratch/c.c23045409/dissertation/postGWAS/SMR
-export SMR_REF=/scratch/c.c23045409/MET588/Assessment/SMR
+export SMR_REF=/scratch/c.c23045409/dissertation/postGWAS/SMR/ref
 export LDclump=/scratch/c.c23045409/dissertation/postGWAS/LD_clumping
-export LD_REF=/scratch/c.c23045409/dissertation/postGWAS/postGWAS_FINEMAP/ref_hrc
-export FINEMAP=/scratch/c.c23045409/dissertation/postGWAS/postGWAS_FINEMAP
+export LD_REF=/scratch/c.c23045409/dissertation/postGWAS/FINEMAP/ref
+export FINEMAP=/scratch/c.c23045409/dissertation/postGWAS/FINEMAP
 
 
 # annotate the significant SNPs 
