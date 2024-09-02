@@ -2,11 +2,11 @@
 
 export DATA=/scratch/c.c23045409/dissertation/ccgwas_input/data 
 export LDSR=/scratch/c.c23045409/dissertation/ccgwas_input/LDSR 
+export LD=/scratch/c.c23045409/dissertation/ccgwas_input/LDSR/ref
 export LDAK=/scratch/c.c23045409/dissertation/postGWAS/LDAK
 export MIX=/home/c.c23045409/containers/mixer
 export MIX_out=/home/c.c23045409/containers/mixer/c.c23045409/containers/mixer
 export MIX_dir=/scratch/c.c23045409/dissertation/ccgwas_input/mixer 
-LD=/scratch/c.mpmlh/MET588_h2_rg/MET588_LSH/
 
 ## SNP-based heritability on the libability scale 
     ###LDSR
