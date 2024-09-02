@@ -1,5 +1,6 @@
-#final CC-GWAS
+# conducting CC-GWAS
 
+#prepare shell environment
 export DATA=/scratch/c.c23045409/dissertation/ccgwas_input/data 
 export CCGWAS_out=/scratch/c.c23045409/dissertation/ccgwas_output
 export CCGWAS=/home/c.c23045409/dissertation/CCGWAS-master
@@ -16,9 +17,11 @@ export CCGWAS=/home/c.c23045409/dissertation/CCGWAS-master
     cd $DATA
     module load R/4.4.0
     R 
-
+    # prepare R environment 
     library(data.table)
     library(tidyverse)
+
+    # prepare BDI summary stats 
     BPI <- fread(file = paste0((Sys.getenv("DATA")),"/BPi.txt"), fill=TRUE, header = T) #load data 
     nrow(BPI)
     head(BPI)
@@ -31,7 +34,7 @@ export CCGWAS=/home/c.c23045409/dissertation/CCGWAS-master
 
     fwrite(BPi_wrang, "PGC3_BDI_ccgwas.neff.gz", compress = "gzip") # save file
 
-
+    # prepare BDII summary stats 
     BPII <- fread(file = paste0((Sys.getenv("DATA")),"/BPii.txt"), fill=TRUE) # load data 
     nrow(BPII) 
     head(BPII)
