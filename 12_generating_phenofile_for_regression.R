@@ -1,8 +1,8 @@
 # create file for PRS regression 
 
-
+#set up shell envronment 
 export PRS_R=/scratch/c.c23045409/dissertation/postGWAS/PRS/Ranalysis
-export BDRN=/scratch/c.c23045409/dissertation/postGWAS/PRS/test/raw
+export BDRN=/scratch/c.c23045409/dissertation/postGWAS/PRS/test
 export QC=/scratch/c.c23045409/dissertation/postGWAS/PRS/QC/targetdata
 
 cd $PRS_R
