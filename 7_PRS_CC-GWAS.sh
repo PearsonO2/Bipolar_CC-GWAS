@@ -1,15 +1,16 @@
-#PRS CC-GWAS
+# PRS CC-GWAS
 
 export PRS_DATA=/scratch/c.c23045409/dissertation/postGWAS/PRS/DATA
 export PRS_dir=/scratch/c.c23045409/dissertation/postGWAS/PRS/dir
 export BDRN=/scratch/c.c23045409/dissertation/postGWAS/PRS/test
 export CCGWAS=/home/c.c23045409/dissertation/CCGWAS-master
-LD=/scratch/c.mpmlh/MET588_h2_rg/MET588_LSH/
+export LD=/scratch/c.c23045409/dissertation/ccgwas_input/LDSR/ref
 
 #CCGWAS prep 
-awk '$2 !~ /^rs/' daner_pgc3_BDI_noBDRN > BDI_sort.txt # 19911 rows
-awk '{$2 = gensub(/*:([0-9]+)_.*/, "rs//1", "g", $2); print;}' daner_pgc3_BDI_noBDRN > BDI_sorted.txt
+awk '$2 !~ /^rs/' daner_pgc3_BDI_noBDRN > BDI_sort.txt 
+awk '{$2 = gensub(/*:([0-9]+)_.*/, "rs//1", "g", $2); print;}' daner_pgc3_BDI_noBDRN > BDI_sorted.txt #sorting out SNP names
 
+    #making base data input files for CC-GWAS
     cd $PRS_DATA
     module load R/4.4.0
     R 
@@ -18,7 +19,7 @@ awk '{$2 = gensub(/*:([0-9]+)_.*/, "rs//1", "g", $2); print;}' daner_pgc3_BDI_no
     library(R.utils)
     library(tidyverse) 
 
-    BPI <- fread(file = paste0((Sys.getenv("PRS_DATA")),"/daner_pgc3_BDI_noBDRN"), fill=TRUE) # load BPII fil e
+    BPI <- fread(file = paste0((Sys.getenv("PRS_DATA")),"/daner_pgc3_BDI_noBDRN"), fill=TRUE) # load BPII file
     nrow(BPI) # 7436527
     head(BPI)
 
@@ -43,8 +44,7 @@ awk '{$2 = gensub(/*:([0-9]+)_.*/, "rs//1", "g", $2); print;}' daner_pgc3_BDI_no
     head(BPii_wrang) # check file 
     fwrite(BPii_wrang, "PGC3_BDII_noBDRN.neff.gz", compress = "gzip") #save file 
 
-    #perform CCGWAS 
-
+#perform CCGWAS (still in R environment)
 
     library(devtools)
     #install_github("wouterpeyrot/CCGWAS")

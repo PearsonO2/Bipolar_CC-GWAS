@@ -6,7 +6,7 @@
 export PRS_DATA=/scratch/c.c23045409/dissertation/postGWAS/PRS/DATA
 export PRS_dir=/scratch/c.c23045409/dissertation/postGWAS/PRS/dir
 export BDRN=/scratch/c.c23045409/dissertation/postGWAS/PRS/test
-LD=/scratch/c.mpmlh/MET588_h2_rg/MET588_LSH/
+export LD=/scratch/c.c23045409/dissertation/ccgwas_input/LDSR/ref
 export PRS=/scratch/c.c23045409/dissertation/postGWAS/PRS
 PRScs=/scratch/c.c23045409/dissertation/postGWAS/PRS/PRScs
 export PRS_LDSR=/scratch/c.c23045409/dissertation/postGWAS/PRS/LDSR
@@ -55,6 +55,7 @@ export BD_QC=/scratch/c.c23045409/dissertation/postGWAS/PRS/QC/basedata
     write.table(ccgwas_LDSR, "PRS_ldsr_input.txt", col.names = T, row.names = F, quote = F)
     quit()
 
+#munge sunstats
     munge_sumstats.py --sumstats $PRS_LDSR/ldsr_input.txt --N-col Neff --snp SNP --a1 EA --a2 NEA --p P --signed-sumstats OR,1 --out $PRS_LDSR/PRS
     
     # heritability estimates on the liable scale 

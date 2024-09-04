@@ -1,5 +1,6 @@
-# perfrom regression analysis on PRS score and multiple variables
+# perform regression analysis on PRS score and multiple variables
 
+#set up environment
 library(dplyr)
 library(data.table)
 library(MASS)
@@ -7,7 +8,6 @@ library(ggplot2)
 library(performance)
 
 #loading data
-setwd("~/Documents/Masters/Dissertation/code /final_code")
 PRS <- fread("PRS_complete.txt")
 eigenval <- fread("../../week8/M_BDRN.PCA.eigenval")
 
@@ -32,7 +32,6 @@ ggplot(eigenval, aes(x = Principal_Component, y = V1)) +
   theme_minimal()
 
 ############################################################################
-# creating new co-variable
 
 PRS_filt <- PRS %>%
   filter(Age_at_Interview !=999) # lost 34 individuals 
@@ -170,6 +169,7 @@ summary(m5a)
 p_values <- 2 * (1 - pnorm(abs(7.6938)))
 print(p_values)
 
+#CI
 coef5 <- summary(m5a)$coefficients
 Z <- qnorm(0.975)  # for a 95% confidence interval
 CI_lower <- coef5[, "Value"] - Z * se
@@ -196,7 +196,6 @@ summary(m6a)
 p_values <- 2 * (1 - pnorm(abs(-3.1682)))
 print(p_values)
 
-
 #confidence interval 
 coef6 <- summary(m6a)$coefficients
 Z <- qnorm(0.975)  # for a 95% confidence interval
@@ -213,14 +212,12 @@ m7a <- lm(Age_onset_impairment ~ PRSadj + Age_at_Interview + Sex + ARRAY+ PC1+ P
 
 m7b <- lm(Age_onset_impairment ~ Age_at_Interview + Sex + ARRAY+ PC1+ PC2+ PC3+ PC4+ PC5, data = age_onset_impairment)
 
-
 compare_performance(m7a,m7b)
 
 #obtaining beta and p-value
 summary(m7a)
 
 # CI
-
 coefficients <- coef(m7a)
 model_summary <- summary(m7a)
 standard_errors <- model_summary$coefficients[, "Std. Error"]

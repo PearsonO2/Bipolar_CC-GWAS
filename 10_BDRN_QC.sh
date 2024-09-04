@@ -3,8 +3,8 @@
 
 export PRS_DATA=/scratch/c.c23045409/dissertation/postGWAS/PRS/DATA
 export PRS_dir=/scratch/c.c23045409/dissertation/postGWAS/PRS/dir
-export BDRN=/scratch/c.c23045409/dissertation/postGWAS/PRS/test/raw
-LD=/scratch/c.mpmlh/MET588_h2_rg/MET588_LSH/
+export BDRN=/scratch/c.c23045409/dissertation/postGWAS/PRS/test
+export LD=/scratch/c.c23045409/dissertation/ccgwas_input/LDSR/ref
 export PRS=/scratch/c.c23045409/dissertation/postGWAS/PRS
 PRScs=/scratch/c.c23045409/dissertation/postGWAS/PRS/PRScs
 export PRS_LDSR=/scratch/c.c23045409/dissertation/postGWAS/PRS/LDSR
@@ -20,7 +20,6 @@ cd $BDRN
 
     library(tidyverse)
     library(data.table)
-
 
     sex <- read.csv(file = paste0((Sys.getenv("BDRN")),"/BDRN_sex.csv"), header=TRUE)
     fam <- read.table(file = paste0((Sys.getenv("BDRN")),"/M_BDRN.fam"), header=TRUE)

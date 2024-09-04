@@ -1,11 +1,11 @@
 # interrogate PRS CC-GWAS output
 
-setwd("~/Documents/Masters/Dissertation/code /final_code/figures")
-
+#prepare R environment
 library(dplyr)
 library(data.table)
 library(qqman)
 
+# read in CC-GWAS results 
 PRS_CCGWAS <- fread("../PRS.out.results.gz")
 
 ##QQ plot
@@ -35,8 +35,8 @@ PRS_CCGWAS_QQ$CHISQ_OLS<-PRS_CCGWAS_QQ$CHISQ_OLS/gclambda
 lambda_OLS<-median(PRS_CCGWAS_QQ$CHISQ_OLS)/0.456
 
 lambda1000_OLS<-1+(lambda_OLS-1)*(1/cases +1/controls)/(1/1000+1/1000) #UCL BD vs New Half of 9999 controls
-print(lambda_OLS) # 1.371775
-print(lambda1000_OLS) # 1.008732
+print(lambda_OLS) 
+print(lambda1000_OLS) 
 
 #Exact 
 PRS_CCGWAS_QQ$CHISQ_Exact<-qchisq(1-PRS_CCGWAS_QQ$Exact_pval,1)
@@ -45,7 +45,7 @@ PRS_CCGWAS_QQ$CHISQ_Exact<-PRS_CCGWAS_QQ$CHISQ_Exact/gclambda
 lambda_Exact<-median(PRS_CCGWAS_QQ$CHISQ_Exact)/0.456
 
 lambda1000_Exact<-1+(lambda_Exact-1)*(1/cases +1/controls)/(1/1000+1/1000) #UCL BD vs New Half of 9999 controls
-print(lambda_Exact) # 0.9120177
-print(lambda1000_Exact) # 0.9979336
+print(lambda_Exact)
+print(lambda1000_Exact) 
 
 
