@@ -3,7 +3,7 @@
 export PRS_DATA=/scratch/c.c23045409/dissertation/postGWAS/PRS/DATA
 export PRS_dir=/scratch/c.c23045409/dissertation/postGWAS/PRS/dir
 export BDRN=/scratch/c.c23045409/dissertation/postGWAS/PRS/test
-LD=/scratch/c.mpmlh/MET588_h2_rg/MET588_LSH/
+export LD=/scratch/c.c23045409/dissertation/ccgwas_input/LDSR/ref
 
 #mixer 
      # getting sumsets into correct format
@@ -79,30 +79,4 @@ LD=/scratch/c.mpmlh/MET588_h2_rg/MET588_LSH/
         --pop-prev 0.006,0.004 \
         --out $PRS_dir/BPIvII_prs_R
 
-#Heritability of phenotype 1
-#---------------------------
-#Total Liability scale h2: 0.1687 (0.0091)
-#Lambda GC: 1.3169
-#Mean Chi^2: 1.3817
-#Intercept: 1.0337 (0.011)
-#Ratio: 0.0882 (0.0289)
 
-#Heritability of phenotype 2/2
-#-----------------------------
-#Total Liability scale h2: 0.0693 (0.0168)
-#Lambda GC: 1.0926
-#Mean Chi^2: 1.0889
-#Intercept: 1.0429 (0.0083)
-#Ratio: 0.4825 (0.0936)
-
-#Genetic Covariance
-#------------------
-#Total Liability scale gencov: 0.1035 (0.0092)
-#Mean z1*z2: 0.2917
-#Intercept: 0.171 (0.0068)
-
-#Genetic Correlation
-#-------------------
-#Genetic Correlation: 0.9571 (0.1148)
-#Z-score: 8.3353
-#P: 7.7329e-17
