@@ -38,15 +38,15 @@ To make full use of the suggested environment variables, set out own directory a
 
 
 1_CC-GWAS_prep.sh
-	This is for determining the input parameters for the CC-GWAS. 
-	software required: 
+	-This is for determining the input parameters for the CC-GWAS. 
+	-software required: 
 		LDSR ([https://github.com/bulik/ldsc](https://github.com/bulik/ldsc))
 		LDAK SumHer ([https://dougspeed.com/sumher/](https://dougspeed.com/sumher/))
 		Mixer ([https://github.com/precimed/mixer](https://github.com/precimed/mixer))
 		R studio (loaded into the shell environment)
 
 2_CC-GWAS.sh
-	CC-GWAS is an R package but is loaded into the shell environment
+	-CC-GWAS is an R package but is loaded into the shell environment
 		[https://github.com/wouterpeyrot/CCGWAS](https://github.com/wouterpeyrot/CCGWAS)
 
 3_interrogate_CCGWAS_output.R
